@@ -1,0 +1,39 @@
+1. library를 사용하는 C코드 작성 (hello.c)
+1-2. gcc -o hello hello.c 
+
+2. library를 사용하지 않는 C 코드 작성 (withoutLibrary.c)
+2-2. gcc -o withoutLibrary withoutLibrary.c
+// 실행가능 파일 이하 [ELF]로 표기
+
+// ELF file to HEX
+3. xxd -p [ELF] | tr -d '\n' > input_hex.txt
+
+// ELF에서 entry point 구하기
+4. objdump -d [ELF] | grep -A20 "<main>:"
+결과: [00000000000xxxxx] <main>:
+// 이하 [main Entry]로 표기
+
+// input_hex.txt를 사용해 output_array.txt 생성
+5. python elf_to_hex.py
+
+6. vim c_file.c
+// unsigned char data[] = {};
+// 배열부분 output_array.txt 내용으로 붙여넣기
+
+7. gcc -o c_file c_file.c
+8. ./c_file
+execute0.bin 생성
+
+9. mv execute_0.bin to_do_list
+
+// 4번에서 구한 [main Entry] 만큼 더해서 stack point 설정
+10. vim scenario2.c
+// int (*func)() = (int (*)())(task->stack+0x[main Entry]);
+11. gcc -o scenario2 scenario2.c
+
+12. ./scenario2
+
+13. 실행결과: hello -> segmentfault / withoutLibrary -> 정상 실행가능 
+
+14. 결론: ELF의 Dynamic linking과 Loader의 역할, CR3 및 기타 레지스터의 접근이 불가능하여, C언어로 구현하는 것은 불가능 합니다.
+이에, CPU 및 레지스터가 가상화된 qemu환경을 활용하는 것이 올바른 접근 방법입니다.
