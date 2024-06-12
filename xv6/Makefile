@@ -182,6 +182,9 @@ UPROGS=\
 	_wc\
 	_zombie\
 	_helloworld\
+	_proctest\
+	_loop\
+	_cow\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
@@ -255,6 +258,9 @@ EXTRA=\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
 	helloworld.c\
+	proctest.c\
+	loop.c\
+	cow.c\
 
 dist:
 	rm -rf dist
